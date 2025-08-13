@@ -28,7 +28,7 @@ class _AppState extends State<App> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<AuthCubit>(create: (context) => getIt<AuthCubit>()),
+        BlocProvider<AuthCubit>(create: (context) => di<AuthCubit>()),
       ],
       child: MaterialApp.router(
         routerConfig: router,
