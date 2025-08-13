@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:forui/forui.dart';
 import 'package:flutter/material.dart';
 
@@ -31,6 +34,7 @@ FThemeData get zincLight {
     error: Color(0xFFEF4444),
     errorForeground: Color(0xFFFAFAFA),
     border: Color(0xFFE4E4E7),
+    systemOverlayStyle: SystemUiOverlayStyle(),
   );
 
   final typography = _typography(colors: colors);
