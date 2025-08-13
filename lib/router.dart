@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:template_clean_architecture_june_2025/presentations/auth/view/auth_view.dart';
 import 'package:template_clean_architecture_june_2025/presentations/home/home.dart';
 
 final dashboardNavigatorKey = GlobalKey<NavigatorState>();
 final rootNavigatorKey = GlobalKey<NavigatorState>();
 final router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/home',
+  initialLocation: '/auth',
   routes: [
+    GoRoute(path: '/auth', builder: (context, state) => const AuthView()),
     GoRoute(path: '/home', builder: (context, state) => const HomeView()),
     // GoRoute(
     //   path: '/',

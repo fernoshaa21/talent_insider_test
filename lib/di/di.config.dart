@@ -29,6 +29,10 @@ import 'package:template_clean_architecture_june_2025/data/repositories/auth_rep
     as _i716;
 import 'package:template_clean_architecture_june_2025/domain/domain.dart'
     as _i965;
+import 'package:template_clean_architecture_june_2025/domain/usecases/auth_usecase.dart'
+    as _i653;
+import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_cubit.dart'
+    as _i1030;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -39,6 +43,7 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final connectivityModule = _$ConnectivityModule();
     final dioModule = _$DioModule();
+    gh.factory<_i1030.AuthCubit>(() => _i1030.AuthCubit());
     gh.lazySingleton<_i895.Connectivity>(
       () => connectivityModule.connectivity(),
     );
@@ -52,10 +57,13 @@ extension GetItInjectableX on _i174.GetIt {
       () => dioModule.dio(gh<_i989.AuthInterceptor>()),
     );
     gh.factory<_i606.AuthDatasource>(
-      () => _i606.AuthDatasource(gh<_i361.Dio>(), baseUrl: gh<String>()),
+      () => _i606.AuthDatasource.new(gh<_i361.Dio>(), baseUrl: gh<String>()),
     );
     gh.lazySingleton<_i965.AuthRepository>(
       () => _i716.AuthRepsitoryImpl(gh<_i606.AuthDatasource>()),
+    );
+    gh.factory<_i653.AuthUsecase>(
+      () => _i653.AuthUsecase(gh<_i965.AuthRepository>()),
     );
     return this;
   }

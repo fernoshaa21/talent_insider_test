@@ -43,6 +43,10 @@ dependencies:
   connectivity_plus: ^6.1.4
   pretty_dio_logger: ^1.4.0
   flutter_native_splash: ^2.4.6
+  hydrated_bloc: ^10.1.1
+  bloc: ^9.0.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
