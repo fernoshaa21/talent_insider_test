@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:forui/forui.dart';
 import 'package:template_clean_architecture_june_2025/di/di.dart';
 import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_cubit.dart';
+import 'package:template_clean_architecture_june_2025/presentations/home/cubit/home_cubit.dart';
 
 import 'router.dart';
 import 'theme/theme.dart';
@@ -29,6 +30,7 @@ class _AppState extends State<App> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<AuthCubit>(create: (context) => di<AuthCubit>()),
+        BlocProvider<HomeCubit>(create: (context) => di<HomeCubit>()),
       ],
       child: MaterialApp.router(
         routerConfig: router,

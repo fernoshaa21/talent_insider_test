@@ -10,6 +10,7 @@ import 'package:template_clean_architecture_june_2025/config.dart';
 
 import 'package:template_clean_architecture_june_2025/data/utils/dio_token_interceptor.dart';
 import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_cubit.dart';
+import 'package:template_clean_architecture_june_2025/presentations/home/cubit/home_cubit.dart';
 
 import '../core/network/network.dart';
 
@@ -46,6 +47,7 @@ void _useCases() {
 void _cubits() {
   //Cubits use MultiBlocProvider (RegisterSingleton Injections)
   di.registerLazySingleton(() => AuthCubit());
+  di.registerLazySingleton(() => HomeCubit());
 }
 
 void _utils() {
