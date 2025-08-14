@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="template_clean_architecture_june_2025"
+        android:label="Trimitra Putra Mandiri"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

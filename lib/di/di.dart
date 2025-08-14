@@ -1,16 +1,14 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+
 import 'package:dio/dio.dart';
 
 import 'package:get_it/get_it.dart';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:template_clean_architecture_june_2025/config.dart';
-
-import 'package:template_clean_architecture_june_2025/data/utils/dio_token_interceptor.dart';
-import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_cubit.dart';
-import 'package:template_clean_architecture_june_2025/presentations/home/cubit/home_cubit.dart';
+import 'package:trimitra_putra_mandiri/config.dart';
+import 'package:trimitra_putra_mandiri/data/utils/dio_token_interceptor.dart';
+import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
+import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
 
 import '../core/network/network.dart';
 

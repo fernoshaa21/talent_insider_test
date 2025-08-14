@@ -1,6 +1,6 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_state.dart';
+import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_state.dart';
 
 @injectable
 class AuthCubit extends HydratedCubit<AuthState> {

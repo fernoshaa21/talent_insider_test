@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:template_clean_architecture_june_2025/presentations/auth/view/auth_view.dart';
-import 'package:template_clean_architecture_june_2025/presentations/home/home.dart';
+import 'package:trimitra_putra_mandiri/presentations/auth/view/auth_view.dart';
+import 'package:trimitra_putra_mandiri/presentations/home/view/home_view.dart';
 
 final dashboardNavigatorKey = GlobalKey<NavigatorState>();
 final rootNavigatorKey = GlobalKey<NavigatorState>();

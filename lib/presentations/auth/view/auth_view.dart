@@ -57,7 +57,7 @@ class _AuthViewState extends State<AuthView> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 50),
-                    child: Image.asset('assets/tpm.webp', scale: 10),
+                    child: Image.asset('assets/tpm.png', scale: 1),
                   ),
                   const SizedBox(height: 20),
 

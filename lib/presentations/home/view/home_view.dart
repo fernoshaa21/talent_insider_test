@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:template_clean_architecture_june_2025/presentations/home/cubit/home_cubit.dart';
-import 'package:template_clean_architecture_june_2025/presentations/home/cubit/home_state.dart';
+
+import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
+import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_state.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});

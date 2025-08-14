@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:go_router/go_router.dart';
-import 'package:template_clean_architecture_june_2025/presentations/auth/cubit/auth_cubit.dart';
+import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
 
 // import 'package:flutter_news_app/config/flavor_config.dart';
 
