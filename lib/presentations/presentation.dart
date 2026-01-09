@@ -1,2 +1,3 @@
 export 'home/home.dart';
 export 'auth/auth.dart';
+export 'explore_property/explore_property.dart';
