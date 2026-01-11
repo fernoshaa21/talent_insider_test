@@ -10,14 +10,16 @@ _AuthState _$AuthStateFromJson(Map<String, dynamic> json) => _AuthState(
   status:
       $enumDecodeNullable(_$AuthStatusEnumMap, json['status']) ??
       AuthStatus.initial,
-  username: json['username'] as String?,
+  user: json['user'] == null
+      ? null
+      : LocalUser.fromJson(json['user'] as Map<String, dynamic>),
   errorMessage: json['errorMessage'] as String?,
 );
 
 Map<String, dynamic> _$AuthStateToJson(_AuthState instance) =>
     <String, dynamic>{
       'status': _$AuthStatusEnumMap[instance.status]!,
-      'username': instance.username,
+      'user': instance.user,
       'errorMessage': instance.errorMessage,
     };
 

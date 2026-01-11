@@ -76,7 +76,7 @@ class _Env {
   factory _Env.dev(String fcmToken) {
     return _Env(
       appName: 'Dev',
-      baseUrl: '',
+      baseUrl: 'https://api-test.linkedinindonesia.com/api',
       envName: 'dev',
       fcmToken: fcmToken,
       fcmPrefix: 'dev',

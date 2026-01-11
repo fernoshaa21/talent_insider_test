@@ -6,7 +6,7 @@ import 'package:trimitra_putra_mandiri/di/di.dart';
 import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
 import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
 
-import 'router.dart';
+import 'router/router.dart';
 import 'theme/theme.dart';
 
 class App extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
 
@@ -9,9 +10,9 @@ import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart'
 class DioTokenInterceptor implements InterceptorsWrapper {
   // final AuthCubit authCubit;
   final AuthCubit Function() getAuthCubit;
-  final GoRoute router;
+  final BuildContext? context;
 
-  DioTokenInterceptor(this.getAuthCubit, this.router);
+  DioTokenInterceptor(this.getAuthCubit, this.context);
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == HttpStatus.unauthorized) {
