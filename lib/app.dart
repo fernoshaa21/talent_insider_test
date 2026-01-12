@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:forui/forui.dart';
 import 'package:trimitra_putra_mandiri/di/di.dart';
 import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
+import 'package:trimitra_putra_mandiri/presentations/explore_property/cubit/explore_property_cubit.dart';
 import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
 
 import 'router/router.dart';
@@ -31,6 +32,9 @@ class _AppState extends State<App> {
       providers: [
         BlocProvider<AuthCubit>(create: (context) => di<AuthCubit>()),
         BlocProvider<HomeCubit>(create: (context) => di<HomeCubit>()),
+        BlocProvider<ExplorePropertyCubit>(
+          create: (context) => di<ExplorePropertyCubit>(),
+        ),
       ],
       child: MaterialApp.router(
         routerConfig: router,
