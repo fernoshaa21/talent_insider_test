@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ExplorePropertyState {
 
- ExplorePropertyStatus get status; PropertiesResponse? get properties; String? get errorMessage;
+ ExplorePropertyStatus get status; PropertiesResponse? get properties; PropertiesSearchResponse? get searchProperties; String? get errorMessage;
 /// Create a copy of ExplorePropertyState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ExplorePropertyStateCopyWith<ExplorePropertyState> get copyWith => _$ExplorePro
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExplorePropertyState&&(identical(other.status, status) || other.status == status)&&(identical(other.properties, properties) || other.properties == properties)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ExplorePropertyState&&(identical(other.status, status) || other.status == status)&&(identical(other.properties, properties) || other.properties == properties)&&(identical(other.searchProperties, searchProperties) || other.searchProperties == searchProperties)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,status,properties,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,properties,searchProperties,errorMessage);
 
 @override
 String toString() {
-  return 'ExplorePropertyState(status: $status, properties: $properties, errorMessage: $errorMessage)';
+  return 'ExplorePropertyState(status: $status, properties: $properties, searchProperties: $searchProperties, errorMessage: $errorMessage)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ExplorePropertyStateCopyWith<$Res>  {
   factory $ExplorePropertyStateCopyWith(ExplorePropertyState value, $Res Function(ExplorePropertyState) _then) = _$ExplorePropertyStateCopyWithImpl;
 @useResult
 $Res call({
- ExplorePropertyStatus status, PropertiesResponse? properties, String? errorMessage
+ ExplorePropertyStatus status, PropertiesResponse? properties, PropertiesSearchResponse? searchProperties, String? errorMessage
 });
 
 
@@ -65,11 +65,12 @@ class _$ExplorePropertyStateCopyWithImpl<$Res>
 
 /// Create a copy of ExplorePropertyState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? properties = freezed,Object? errorMessage = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? properties = freezed,Object? searchProperties = freezed,Object? errorMessage = freezed,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ExplorePropertyStatus,properties: freezed == properties ? _self.properties : properties // ignore: cast_nullable_to_non_nullable
-as PropertiesResponse?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PropertiesResponse?,searchProperties: freezed == searchProperties ? _self.searchProperties : searchProperties // ignore: cast_nullable_to_non_nullable
+as PropertiesSearchResponse?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  PropertiesSearchResponse? searchProperties,  String? errorMessage)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ExplorePropertyState() when $default != null:
-return $default(_that.status,_that.properties,_that.errorMessage);case _:
+return $default(_that.status,_that.properties,_that.searchProperties,_that.errorMessage);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.status,_that.properties,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  String? errorMessage)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  PropertiesSearchResponse? searchProperties,  String? errorMessage)  $default,) {final _that = this;
 switch (_that) {
 case _ExplorePropertyState():
-return $default(_that.status,_that.properties,_that.errorMessage);case _:
+return $default(_that.status,_that.properties,_that.searchProperties,_that.errorMessage);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.status,_that.properties,_that.errorMessage);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  String? errorMessage)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ExplorePropertyStatus status,  PropertiesResponse? properties,  PropertiesSearchResponse? searchProperties,  String? errorMessage)?  $default,) {final _that = this;
 switch (_that) {
 case _ExplorePropertyState() when $default != null:
-return $default(_that.status,_that.properties,_that.errorMessage);case _:
+return $default(_that.status,_that.properties,_that.searchProperties,_that.errorMessage);case _:
   return null;
 
 }
@@ -211,11 +212,12 @@ return $default(_that.status,_that.properties,_that.errorMessage);case _:
 @JsonSerializable()
 
 class _ExplorePropertyState extends ExplorePropertyState {
-  const _ExplorePropertyState({this.status = ExplorePropertyStatus.initial, this.properties, this.errorMessage}): super._();
+  const _ExplorePropertyState({this.status = ExplorePropertyStatus.initial, this.properties, this.searchProperties, this.errorMessage}): super._();
   factory _ExplorePropertyState.fromJson(Map<String, dynamic> json) => _$ExplorePropertyStateFromJson(json);
 
 @override@JsonKey() final  ExplorePropertyStatus status;
 @override final  PropertiesResponse? properties;
+@override final  PropertiesSearchResponse? searchProperties;
 @override final  String? errorMessage;
 
 /// Create a copy of ExplorePropertyState
@@ -231,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExplorePropertyState&&(identical(other.status, status) || other.status == status)&&(identical(other.properties, properties) || other.properties == properties)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ExplorePropertyState&&(identical(other.status, status) || other.status == status)&&(identical(other.properties, properties) || other.properties == properties)&&(identical(other.searchProperties, searchProperties) || other.searchProperties == searchProperties)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,status,properties,errorMessage);
+int get hashCode => Object.hash(runtimeType,status,properties,searchProperties,errorMessage);
 
 @override
 String toString() {
-  return 'ExplorePropertyState(status: $status, properties: $properties, errorMessage: $errorMessage)';
+  return 'ExplorePropertyState(status: $status, properties: $properties, searchProperties: $searchProperties, errorMessage: $errorMessage)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$ExplorePropertyStateCopyWith<$Res> implements $ExplorePro
   factory _$ExplorePropertyStateCopyWith(_ExplorePropertyState value, $Res Function(_ExplorePropertyState) _then) = __$ExplorePropertyStateCopyWithImpl;
 @override @useResult
 $Res call({
- ExplorePropertyStatus status, PropertiesResponse? properties, String? errorMessage
+ ExplorePropertyStatus status, PropertiesResponse? properties, PropertiesSearchResponse? searchProperties, String? errorMessage
 });
 
 
@@ -268,11 +270,12 @@ class __$ExplorePropertyStateCopyWithImpl<$Res>
 
 /// Create a copy of ExplorePropertyState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? properties = freezed,Object? errorMessage = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? properties = freezed,Object? searchProperties = freezed,Object? errorMessage = freezed,}) {
   return _then(_ExplorePropertyState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ExplorePropertyStatus,properties: freezed == properties ? _self.properties : properties // ignore: cast_nullable_to_non_nullable
-as PropertiesResponse?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as PropertiesResponse?,searchProperties: freezed == searchProperties ? _self.searchProperties : searchProperties // ignore: cast_nullable_to_non_nullable
+as PropertiesSearchResponse?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,
   ));
 }

@@ -15,6 +15,11 @@ _ExplorePropertyState _$ExplorePropertyStateFromJson(
   properties: json['properties'] == null
       ? null
       : PropertiesResponse.fromJson(json['properties'] as Map<String, dynamic>),
+  searchProperties: json['searchProperties'] == null
+      ? null
+      : PropertiesSearchResponse.fromJson(
+          json['searchProperties'] as Map<String, dynamic>,
+        ),
   errorMessage: json['errorMessage'] as String?,
 );
 
@@ -23,6 +28,7 @@ Map<String, dynamic> _$ExplorePropertyStateToJson(
 ) => <String, dynamic>{
   'status': _$ExplorePropertyStatusEnumMap[instance.status]!,
   'properties': instance.properties,
+  'searchProperties': instance.searchProperties,
   'errorMessage': instance.errorMessage,
 };
 

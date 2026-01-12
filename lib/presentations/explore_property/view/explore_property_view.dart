@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../domain/domain.dart';
+import '../../../lib.dart';
 import '../cubit/explore_property_cubit.dart';
 import '../cubit/explore_property_state.dart';
+
+const priceGradient = LinearGradient(
+  colors: [
+    Color(0xFF970001), // red
+    Color(0xFF004690), // navy
+    Color(0xFF00ACA9), // teal
+  ],
+);
+
+const unselectedTrack = Colors.grey;
 
 class ExplorePropertyView extends StatefulWidget {
   const ExplorePropertyView({super.key});
@@ -15,10 +27,12 @@ class ExplorePropertyView extends StatefulWidget {
 class _ExplorePropertyViewState extends State<ExplorePropertyView> {
   // ---- local filter state ----
   String? _status; // "new" / "second" / null
-  String? _type; // "house" / "apartment" / dst
-  double _priceMin = 0;
-  double _priceMax = 0;
+  String? _type; // "rumah" / "apartment" / dll
+
   RangeValues _priceRange = const RangeValues(0, 0);
+
+  /// maksimum harga (ikut Swagger)
+  static const double kPriceMax = 1000000000; // 1 Miliar
 
   @override
   void initState() {
@@ -30,20 +44,73 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
   }
 
   void _fetch() {
+    int? priceMin;
+    int? priceMax;
+
+    // kondisi "belum pernah dipilih" (default 0..0) → jangan kirim filter
+    final bool notPicked = _priceRange.start == 0 && _priceRange.end == 0;
+
+    // kondisi "full range" (0..max) → juga dianggap tanpa filter
+    final bool fullRange =
+        _priceRange.start == 0 && _priceRange.end >= kPriceMax;
+
+    if (!notPicked && !fullRange) {
+      priceMin = _priceRange.start.round();
+      priceMax = _priceRange.end.round();
+
+      // pastikan tidak lewat batas
+      if (priceMax > kPriceMax.toInt()) {
+        priceMax = kPriceMax.toInt();
+      }
+    }
+
+    debugPrint(
+      '[FILTER] status=$_status type=$_type priceMin=$priceMin priceMax=$priceMax',
+    );
+
     context.read<ExplorePropertyCubit>().getProperties(
       status: _status,
       type: _type,
-      // priceMin: _priceRange.start.toInt(),
-      // priceMax: _priceRange.end.toInt(),
+      priceMin: priceMin,
+      priceMax: priceMax,
       viewMode: 'simple',
     );
+  }
+
+  String formatShortPrice(double value) {
+    final v = value.toInt();
+
+    if (v >= 1000000000) {
+      // >= 1 Miliar
+      final miliaran = v / 1000000000;
+      final str = miliaran % 1 == 0
+          ? miliaran.toInt().toString()
+          : miliaran.toStringAsFixed(1);
+      return '${str}M'; // M = milyar
+    } else if (v >= 1000000) {
+      // >= 1 juta
+      final jutaan = v / 1000000;
+      final str = jutaan % 1 == 0
+          ? jutaan.toInt().toString()
+          : jutaan.toStringAsFixed(1);
+      return '${str}jt';
+    } else if (v >= 1000) {
+      // ribuan
+      final ribu = v / 1000;
+      final str = ribu % 1 == 0
+          ? ribu.toInt().toString()
+          : ribu.toStringAsFixed(1);
+      return '${str}rb';
+    }
+
+    return v.toString();
   }
 
   void _resetFilter() {
     setState(() {
       _status = null;
       _type = null;
-      _priceRange = const RangeValues(0, 100000000);
+      _priceRange = const RangeValues(0, 0);
     });
     _fetch();
   }
@@ -56,7 +123,14 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
       builder: (context, state) {
         final PropertiesResponse? response = state.properties;
         final items = response?.data?.data ?? [];
-        final total = items.length; // bisa diganti meta/pagination kalau mau
+        final total = items.length;
+
+        bool hasPriceFilter() {
+          final notPicked = _priceRange.start == 0 && _priceRange.end == 0;
+          final fullRange =
+              _priceRange.start == 0 && _priceRange.end >= kPriceMax;
+          return !notPicked && !fullRange;
+        }
 
         return Scaffold(
           body: Stack(
@@ -84,7 +158,7 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                                     Icons.arrow_back_ios_new,
                                     size: 18,
                                   ),
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () => context.goNamed('home'),
                                 ),
                               ),
                             ),
@@ -105,12 +179,27 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                                     width: 1.2,
                                   ),
                                 ),
-                                child: const TextField(
-                                  decoration: InputDecoration(
-                                    prefixIcon: Icon(Icons.search),
-                                    hintText: 'Find Property',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.zero,
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(24),
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const SearchPropertyView(
+                                              initialQuery: '',
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: IgnorePointer(
+                                    child: const TextField(
+                                      decoration: InputDecoration(
+                                        prefixIcon: Icon(Icons.search),
+                                        hintText: 'Find Property',
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.all(10),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -215,9 +304,7 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                                 ),
                                 _FilterChip(
                                   label: 'Price',
-                                  isPrimary:
-                                      _priceRange.start > 0 ||
-                                      _priceRange.end < 100000000,
+                                  isPrimary: hasPriceFilter(),
                                   onTap: () => _openPriceFilter(context),
                                 ),
                               ],
@@ -350,7 +437,12 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
           return _ChoiceChip(
             label: label,
             selected: tempType == value,
-            onTap: () => tempType = value,
+            onTap: () {
+              tempType = value;
+              setState(() => _type = tempType);
+              _fetch();
+              Navigator.pop(context);
+            },
           );
         }
 
@@ -384,14 +476,17 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) {
-        RangeValues tempRange = _priceRange;
+        // kalau belum pernah dipilih, buka langsung full range
+        RangeValues tempRange = _priceRange.start == 0 && _priceRange.end == 0
+            ? const RangeValues(0, kPriceMax)
+            : _priceRange;
 
         return StatefulBuilder(
           builder: (context, setModalState) {
             return _FilterSheetWrapper(
               title: 'Price Range',
               onReset: () {
-                tempRange = const RangeValues(0, 100000000);
+                tempRange = const RangeValues(0, 0);
                 setState(() => _priceRange = tempRange);
                 _fetch();
                 Navigator.pop(context);
@@ -405,17 +500,33 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'IDR ${tempRange.start.toInt()} - IDR ${tempRange.end.toInt()}',
+                    'IDR ${formatShortPrice(tempRange.start)} - '
+                    'IDR ${formatShortPrice(tempRange.end == 0 ? kPriceMax : tempRange.end)}',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 16),
-                  RangeSlider(
-                    values: tempRange,
-                    min: 0,
-                    max: 100000000,
-                    onChanged: (val) {
-                      setModalState(() => tempRange = val);
-                    },
+                  SliderTheme(
+                    data: SliderTheme.of(context).copyWith(
+                      trackHeight: 6,
+                      thumbShape: const RoundSliderThumbShape(
+                        enabledThumbRadius: 10,
+                      ),
+                      overlayShape: const RoundSliderOverlayShape(
+                        overlayRadius: 20,
+                      ),
+                      thumbColor: const Color(0xFF004690),
+                      activeTrackColor: Colors.transparent,
+                      inactiveTrackColor: unselectedTrack,
+                      rangeTrackShape: const _GradientTrackShape(),
+                    ),
+                    child: RangeSlider(
+                      values: tempRange,
+                      min: 0,
+                      max: kPriceMax,
+                      onChanged: (val) {
+                        setModalState(() => tempRange = val);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -428,6 +539,7 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
 }
 
 // ---------------- SMALL WIDGETS ----------------
+
 class _FilterChip extends StatelessWidget {
   final String label;
   final bool isPrimary;
@@ -478,6 +590,92 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
+class _GradientTrackShape extends RangeSliderTrackShape {
+  const _GradientTrackShape();
+
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final trackHeight = sliderTheme.trackHeight ?? 4;
+    final trackLeft = offset.dx;
+    final trackTop = offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final trackWidth = parentBox.size.width;
+
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required Animation<double> enableAnimation,
+    required Offset endThumbCenter,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Offset startThumbCenter,
+    required TextDirection textDirection,
+  }) {
+    final rect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+
+    // kiri (sebelum start thumb)
+    final leftRect = Rect.fromLTRB(
+      rect.left,
+      rect.top,
+      startThumbCenter.dx,
+      rect.bottom,
+    );
+
+    // kanan (setelah end thumb)
+    final rightRect = Rect.fromLTRB(
+      endThumbCenter.dx,
+      rect.top,
+      rect.right,
+      rect.bottom,
+    );
+
+    // tengah (aktif) → pakai gradient
+    final activeRect = Rect.fromLTRB(
+      startThumbCenter.dx,
+      rect.top,
+      endThumbCenter.dx,
+      rect.bottom,
+    );
+
+    final inactivePaint = Paint()..color = unselectedTrack;
+    final activePaint = Paint()
+      ..shader = priceGradient.createShader(activeRect);
+
+    // kiri & kanan abu-abu
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(leftRect, const Radius.circular(6)),
+      inactivePaint,
+    );
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(rightRect, const Radius.circular(6)),
+      inactivePaint,
+    );
+
+    // bagian aktif dengan gradient
+    context.canvas.drawRRect(
+      RRect.fromRectAndRadius(activeRect, const Radius.circular(6)),
+      activePaint,
+    );
+  }
+}
+
 class _FilterSheetWrapper extends StatelessWidget {
   final String title;
   final VoidCallback onReset;
@@ -485,7 +683,6 @@ class _FilterSheetWrapper extends StatelessWidget {
   final Widget child;
 
   const _FilterSheetWrapper({
-    super.key,
     required this.title,
     required this.onReset,
     required this.onApply,
@@ -544,7 +741,10 @@ class _FilterSheetWrapper extends StatelessWidget {
                 onPressed: onApply,
                 child: const Text(
                   'Show all result (99+)',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -587,7 +787,7 @@ class _ChoiceChip extends StatelessWidget {
           label,
           style: TextStyle(
             color: text,
-            fontSize: 16, // agak besar biar kayak desain
+            fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
         ),

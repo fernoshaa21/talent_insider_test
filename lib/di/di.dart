@@ -50,13 +50,14 @@ void _useCases() {
   di.registerSingleton<LoginUseCase>(LoginUseCase(di()));
   di.registerSingleton<RegisterUsecase>(RegisterUsecase(di()));
   di.registerSingleton<GetPropertiesUsecase>(GetPropertiesUsecase(di()));
+  di.registerSingleton<SearchPropertiesUsecase>(SearchPropertiesUsecase(di()));
 }
 
 void _cubits() {
   //Cubits use MultiBlocProvider (RegisterSingleton Injections)
   di.registerLazySingleton(() => AuthCubit(di(), di()));
   di.registerLazySingleton(() => HomeCubit());
-  di.registerLazySingleton(() => ExplorePropertyCubit(di()));
+  di.registerLazySingleton(() => ExplorePropertyCubit(di(), di()));
 }
 
 void _utils() {

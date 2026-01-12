@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../lib.dart';
+
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
@@ -51,14 +53,25 @@ class HomeView extends StatelessWidget {
                 ),
                 color: Colors.white,
               ),
-              child: const TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'Find Property',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(24),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          const SearchPropertyView(initialQuery: ''),
+                    ),
+                  );
+                },
+                child: IgnorePointer(
+                  child: const TextField(
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: 'Find Property',
+
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(16),
+                    ),
                   ),
                 ),
               ),

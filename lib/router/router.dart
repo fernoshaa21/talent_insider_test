@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/view/auth_view.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/view/register_view.dart';
-import 'package:trimitra_putra_mandiri/presentations/explore_property/view/explore_property_view.dart';
-import 'package:trimitra_putra_mandiri/presentations/home/view/home_view.dart';
+
+import '../lib.dart';
 
 final dashboardNavigatorKey = GlobalKey<NavigatorState>();
 final rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -31,6 +29,20 @@ final router = GoRouter(
       path: '/explore_property',
       name: 'explore_property',
       builder: (context, state) => const ExplorePropertyView(),
+    ),
+    GoRoute(
+      path: '/search_properties',
+      name: 'search_properties',
+      builder: (context, state) => const SearchPropertyView(),
+    ),
+    GoRoute(
+      path: '/result_properties_view',
+      name: 'result_properties_view',
+      builder: (context, state) {
+        // ambil keyword yang dikirim lewat extra
+        final keyword = state.extra as String? ?? '';
+        return SearchPropertyResultView(initialKeyword: keyword);
+      },
     ),
   ],
 );

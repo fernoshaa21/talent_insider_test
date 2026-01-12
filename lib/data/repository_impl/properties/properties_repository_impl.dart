@@ -86,4 +86,46 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
       return Left(Failure.parseFromException(e));
     }
   }
+
+  @override
+  Future<Either<Failure, PropertiesSearchResponse>> searchProperties({
+    String? search,
+    String viewMode = 'simple',
+    String? type,
+    String? status,
+    int? priceMin,
+    int? priceMax,
+    int perPage = 20,
+    List<int>? ids,
+  }) async {
+    final isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(Failure.noConnection());
+    }
+
+    try {
+      final response = await api.searchProperties(
+        search: search,
+        viewMode: viewMode,
+        type: type,
+        status: status,
+        priceMin: priceMin,
+        priceMax: priceMax,
+        perPage: perPage,
+        ids: ids,
+      );
+
+      if (!response.success) {
+        return Left(Failure.serverError(response.message));
+      }
+
+      if (response.data == null) {
+        return Left(Failure.unknownError('Data search kosong'));
+      }
+
+      return Right(response.data!);
+    } catch (e) {
+      return Left(Failure.parseFromException(e));
+    }
+  }
 }

@@ -18,6 +18,7 @@ abstract class ExplorePropertyState with _$ExplorePropertyState {
   const factory ExplorePropertyState({
     @Default(ExplorePropertyStatus.initial) ExplorePropertyStatus status,
     PropertiesResponse? properties,
+    PropertiesSearchResponse? searchProperties,
     String? errorMessage,
   }) = _ExplorePropertyState;
 

@@ -24,6 +24,16 @@ abstract class PropertiesApi {
     int perPage,
     List<int>? ids,
   });
+  Future<ApiResponse<PropertiesSearchResponse>> searchProperties({
+    String? search,
+    String viewMode,
+    String? type,
+    String? status,
+    int? priceMin,
+    int? priceMax,
+    int perPage,
+    List<int>? ids,
+  });
 }
 
 class PropertiesApiImpl implements PropertiesApi {
@@ -82,14 +92,43 @@ class PropertiesApiImpl implements PropertiesApi {
       if (priceMin != null) 'price_min': priceMin,
       if (priceMax != null) 'price_max': priceMax,
       'per_page': perPage,
-      if (ids != null && ids.isNotEmpty) 'ids[]': ids, // sesuai docs
+      if (ids != null && ids.isNotEmpty) 'ids[]': ids,
     };
 
     final response = await dio.get('/properties', queryParameters: query);
 
-    // Di sini json adalah full body: { meta, data, pagination }
     return ApiResponse.fromResponse(response, (json) {
       return PropertiesResponse.fromJson(json);
+    });
+  }
+
+  @override
+  Future<ApiResponse<PropertiesSearchResponse>> searchProperties({
+    String? search,
+    String viewMode = 'simple',
+    String? type,
+    String? status,
+    int? priceMin,
+    int? priceMax,
+    int perPage = 20,
+    List<int>? ids,
+  }) async {
+    final body = <String, dynamic>{
+      if (search != null && search.isNotEmpty) 'search': search,
+      'ids': ids ?? <int>[],
+      'view_mode': viewMode,
+      if (type != null && type.isNotEmpty) 'type': type,
+      if (status != null && status.isNotEmpty) 'status': status,
+      'price_min': priceMin ?? 0,
+      'price_max': priceMax ?? 0,
+      'per_page': perPage,
+    };
+
+    final response = await dio.post('/properties/search', data: body);
+
+    // json = { meta, data, pagination }
+    return ApiResponse.fromResponse(response, (json) {
+      return PropertiesSearchResponse.fromJson(json);
     });
   }
 }

@@ -24,4 +24,14 @@ abstract class PropertiesRepository {
     int perPage,
     List<int>? ids,
   });
+  Future<Either<Failure, PropertiesSearchResponse>> searchProperties({
+    String? search,
+    String viewMode,
+    String? type,
+    String? status,
+    int? priceMin,
+    int? priceMax,
+    int perPage,
+    List<int>? ids,
+  });
 }
