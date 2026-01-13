@@ -30,6 +30,10 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
 
   static const double kPriceMax = 1000000000;
 
+  int currentPage = 12; // Track current page
+  bool isLoading = false; // Track loading state
+  bool hasMoreData = true; // Flag to check if more data is available
+
   @override
   void initState() {
     super.initState();
@@ -40,35 +44,38 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
   }
 
   void _fetch() {
-    int? priceMin;
-    int? priceMax;
+    if (mounted) {
+      int? priceMin;
+      int? priceMax;
 
-    final bool notPicked = _priceRange.start == 0 && _priceRange.end == 0;
+      final bool notPicked = _priceRange.start == 0 && _priceRange.end == 0;
+      final bool fullRange =
+          _priceRange.start == 0 && _priceRange.end >= kPriceMax;
 
-    final bool fullRange =
-        _priceRange.start == 0 && _priceRange.end >= kPriceMax;
+      if (!notPicked && !fullRange) {
+        priceMin = _priceRange.start.round();
+        priceMax = _priceRange.end.round();
 
-    if (!notPicked && !fullRange) {
-      priceMin = _priceRange.start.round();
-      priceMax = _priceRange.end.round();
-
-      // pastikan tidak lewat batas
-      if (priceMax > kPriceMax.toInt()) {
-        priceMax = kPriceMax.toInt();
+        // Pastikan harga maksimum tidak melebihi batas
+        if (priceMax > kPriceMax.toInt()) {
+          priceMax = kPriceMax.toInt();
+        }
       }
+
+      debugPrint(
+        '[FILTER] status=$_status type=$_type priceMin=$priceMin priceMax=$priceMax',
+      );
+
+      // Ambil properti lebih banyak dari API
+      context.read<ExplorePropertyCubit>().getProperties(
+        status: _status,
+        type: _type,
+        priceMin: priceMin,
+        priceMax: priceMax,
+        viewMode: 'simple',
+        perPage: currentPage,
+      );
     }
-
-    debugPrint(
-      '[FILTER] status=$_status type=$_type priceMin=$priceMin priceMax=$priceMax',
-    );
-
-    context.read<ExplorePropertyCubit>().getProperties(
-      status: _status,
-      type: _type,
-      priceMin: priceMin,
-      priceMax: priceMax,
-      viewMode: 'simple',
-    );
   }
 
   String formatShortPrice(double value) {
@@ -124,6 +131,16 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
           final fullRange =
               _priceRange.start == 0 && _priceRange.end >= kPriceMax;
           return !notPicked && !fullRange;
+        }
+
+        // If there are fewer than 12 items, set hasMoreData to false
+        if (state.status == ExplorePropertyStatus.success) {
+          if (total < currentPage) {
+            setState(() {
+              hasMoreData =
+                  false; // Set hasMoreData ke false jika data yang diterima kurang dari jumlah halaman
+            });
+          }
         }
 
         return Scaffold(
@@ -348,8 +365,15 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                                   horizontal: 12,
                                   vertical: 8,
                                 ),
-                                itemCount: items.length,
+                                itemCount: items.length + (hasMoreData ? 1 : 0),
                                 itemBuilder: (context, index) {
+                                  if (index == items.length) {
+                                    _loadMoreData();
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+
                                   final item = items[index];
                                   return Padding(
                                     padding: const EdgeInsets.only(bottom: 12),
@@ -370,6 +394,22 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
         );
       },
     );
+  }
+
+  void _loadMoreData() {
+    if (!isLoading && hasMoreData) {
+      // Memastikan setState dipanggil setelah build selesai
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            isLoading = true; // Tandakan bahwa data sedang dimuat
+            currentPage++; // Naikkan halaman untuk pemanggilan data berikutnya
+          });
+
+          _fetch(); // Ambil data lebih banyak
+        }
+      });
+    }
   }
 
   void _openStatusFilter(BuildContext context) {
