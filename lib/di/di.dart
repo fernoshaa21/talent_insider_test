@@ -5,18 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:trimitra_putra_mandiri/config.dart';
-import 'package:trimitra_putra_mandiri/data/utils/dio_token_interceptor.dart';
-import 'package:trimitra_putra_mandiri/domain/usecases/auth/register_usecase.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
-import 'package:trimitra_putra_mandiri/presentations/explore_property/cubit/explore_property_cubit.dart';
-import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
 
-import '../core/network/network.dart';
-import '../data/data.dart';
-import '../data/datasources/datasources.dart';
-import '../domain/domain.dart';
-import '../router/router.dart';
+import '../lib.dart';
+import '../presentations/explore_property/cubit/explore_property_cubit.dart';
+import '../presentations/home/cubit/home_cubit.dart';
 
 final di = GetIt.I;
 
@@ -51,13 +43,16 @@ void _useCases() {
   di.registerSingleton<RegisterUsecase>(RegisterUsecase(di()));
   di.registerSingleton<GetPropertiesUsecase>(GetPropertiesUsecase(di()));
   di.registerSingleton<SearchPropertiesUsecase>(SearchPropertiesUsecase(di()));
+  di.registerSingleton<GetLocationsPropertiesUsecase>(
+    GetLocationsPropertiesUsecase(di()),
+  );
 }
 
 void _cubits() {
   //Cubits use MultiBlocProvider (RegisterSingleton Injections)
   di.registerLazySingleton(() => AuthCubit(di(), di()));
   di.registerLazySingleton(() => HomeCubit());
-  di.registerLazySingleton(() => ExplorePropertyCubit(di(), di()));
+  di.registerLazySingleton(() => ExplorePropertyCubit(di(), di(), di()));
 }
 
 void _utils() {

@@ -34,6 +34,13 @@ abstract class PropertiesApi {
     int perPage,
     List<int>? ids,
   });
+  Future<ApiResponse<LocationsPropertiesResponse>> getLocationProperties({
+    double? swLatitude,
+    double? swLongitude,
+    double? neLatitude,
+    double? neLongitude,
+    int limit = 500,
+  });
 }
 
 class PropertiesApiImpl implements PropertiesApi {
@@ -129,6 +136,32 @@ class PropertiesApiImpl implements PropertiesApi {
     // json = { meta, data, pagination }
     return ApiResponse.fromResponse(response, (json) {
       return PropertiesSearchResponse.fromJson(json);
+    });
+  }
+
+  @override
+  Future<ApiResponse<LocationsPropertiesResponse>> getLocationProperties({
+    double? swLatitude,
+    double? swLongitude,
+    double? neLatitude,
+    double? neLongitude,
+    int limit = 500,
+  }) async {
+    final queryParams = <String, dynamic>{
+      'sw_latitude': swLatitude,
+      'sw_longitude': swLongitude,
+      'ne_latitude': neLatitude,
+      'ne_longitude': neLongitude,
+      'limit': limit,
+    };
+
+    final response = await dio.get(
+      '/properties/location',
+      queryParameters: queryParams,
+    );
+
+    return ApiResponse.fromResponse(response, (json) {
+      return LocationsPropertiesResponse.fromJson(json);
     });
   }
 }

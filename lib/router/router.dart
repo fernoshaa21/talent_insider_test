@@ -8,13 +8,21 @@ final rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
   navigatorKey: rootNavigatorKey,
-  initialLocation: '/auth',
+  initialLocation: '/splash', // Update initial location ke splash screen
   routes: [
+    // Splash Screen route
+    GoRoute(
+      path: '/splash',
+      name: 'splash',
+      builder: (context, state) => const SplashScreen(),
+    ),
+    // Auth View route
     GoRoute(
       path: '/auth',
       name: 'auth',
       builder: (context, state) => const AuthView(),
     ),
+    // Other routes
     GoRoute(
       path: '/register',
       name: 'register',
@@ -39,7 +47,6 @@ final router = GoRouter(
       path: '/result_properties_view',
       name: 'result_properties_view',
       builder: (context, state) {
-        // ambil keyword yang dikirim lewat extra
         final keyword = state.extra as String? ?? '';
         return SearchPropertyResultView(initialKeyword: keyword);
       },

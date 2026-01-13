@@ -3,3 +3,4 @@ export 'auth/register_usecase.dart';
 export 'properties/add_properties_usecase.dart';
 export 'properties/get_properties_usecase.dart';
 export 'properties/search_properties_usecase.dart';
+export 'properties/locations_properties_usecase.dart';

@@ -1,16 +1,16 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:trimitra_putra_mandiri/domain/usecases/properties/search_properties_usecase.dart';
-
-import '../../../domain/usecases/properties/get_properties_usecase.dart';
+import '../../../lib.dart';
 import 'explore_property_state.dart';
 
 class ExplorePropertyCubit extends HydratedCubit<ExplorePropertyState> {
   final GetPropertiesUsecase _getPropertiesUsecase;
   final SearchPropertiesUsecase _searchPropertiesUsecase;
+  final GetLocationsPropertiesUsecase _getLocationsPropertiesUsecase;
 
   ExplorePropertyCubit(
     this._getPropertiesUsecase,
     this._searchPropertiesUsecase,
+    this._getLocationsPropertiesUsecase,
   ) : super(const ExplorePropertyState());
 
   /// 🏡 GET PROPERTIES
@@ -118,6 +118,48 @@ class ExplorePropertyCubit extends HydratedCubit<ExplorePropertyState> {
         status: ExplorePropertyStatus.initial,
         errorMessage: null,
       ),
+    );
+  }
+
+  Future<void> getLocationProperties({
+    double? swLatitude,
+    double? swLongitude,
+    double? neLatitude,
+    double? neLongitude,
+    int limit = 500,
+  }) async {
+    emit(
+      state.copyWith(status: ExplorePropertyStatus.loading, errorMessage: null),
+    );
+
+    final result = await _getLocationsPropertiesUsecase(
+      GetLocationsPropertiesParam(
+        swLatitude: swLatitude,
+        swLongitude: swLongitude,
+        neLatitude: neLatitude,
+        neLongitude: neLongitude,
+        limit: limit,
+      ),
+    );
+
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: ExplorePropertyStatus.failure,
+            errorMessage: failure.message,
+          ),
+        );
+      },
+      (locationsPropertiesResponse) {
+        emit(
+          state.copyWith(
+            status: ExplorePropertyStatus.success,
+            locationProperties: locationsPropertiesResponse,
+            errorMessage: null,
+          ),
+        );
+      },
     );
   }
 

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:forui/forui.dart';
-import 'package:trimitra_putra_mandiri/di/di.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
-import 'package:trimitra_putra_mandiri/presentations/explore_property/cubit/explore_property_cubit.dart';
-import 'package:trimitra_putra_mandiri/presentations/home/cubit/home_cubit.dart';
+import 'package:talent_insider_test/presentations/explore_property/cubit/explore_property_cubit.dart';
+import 'package:talent_insider_test/presentations/home/cubit/home_cubit.dart';
 
-import 'router/router.dart';
+import 'lib.dart';
 import 'theme/theme.dart';
 
 class App extends StatefulWidget {

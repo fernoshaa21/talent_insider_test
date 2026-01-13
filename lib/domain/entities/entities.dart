@@ -4,3 +4,4 @@ export 'auth/local_user.dart';
 export 'properties/add_property_response.dart';
 export 'properties/properties_response.dart';
 export 'properties/properties_search_response.dart';
+export 'properties/locations_properties_response.dart';

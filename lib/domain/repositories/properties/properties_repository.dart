@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:trimitra_putra_mandiri/domain/domain.dart';
-
-import '../../../core/errors/failure.dart';
+import '../../../lib.dart';
 
 abstract class PropertiesRepository {
   Future<Either<Failure, AddPropertyResponse>> addProperties(
@@ -33,5 +31,12 @@ abstract class PropertiesRepository {
     int? priceMax,
     int perPage,
     List<int>? ids,
+  });
+  Future<Either<Failure, LocationsPropertiesResponse>> getLocationsProperties({
+    double? swLatitude,
+    double? swLongitude,
+    double? neLatitude,
+    double? neLongitude,
+    int limit = 500,
   });
 }

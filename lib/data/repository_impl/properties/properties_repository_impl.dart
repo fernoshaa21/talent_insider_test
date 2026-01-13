@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:trimitra_putra_mandiri/data/datasources/properties/properties.dart';
 
 import '../../../core/core.dart';
 import '../../../domain/domain.dart';
+import '../../data.dart';
 
 class PropertiesRepositoryImpl implements PropertiesRepository {
   final PropertiesApi api;
@@ -119,10 +119,37 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
         return Left(Failure.serverError(response.message));
       }
 
-      if (response.data == null) {
-        return Left(Failure.unknownError('Data search kosong'));
-      }
+      return Right(response.data!);
+    } catch (e) {
+      return Left(Failure.parseFromException(e));
+    }
+  }
 
+  @override
+  Future<Either<Failure, LocationsPropertiesResponse>> getLocationsProperties({
+    double? swLatitude,
+    double? swLongitude,
+    double? neLatitude,
+    double? neLongitude,
+    int limit = 500,
+  }) async {
+    final isConnected = await networkInfo.isConnected;
+    if (!isConnected) {
+      return Left(Failure.noConnection());
+    }
+
+    try {
+      final response = await api.getLocationProperties(
+        swLatitude: swLatitude,
+        swLongitude: swLongitude,
+        neLatitude: neLatitude,
+        neLongitude: neLongitude,
+        limit: limit,
+      );
+
+      if (!response.success) {
+        return Left(Failure.serverError(response.message));
+      }
       return Right(response.data!);
     } catch (e) {
       return Left(Failure.parseFromException(e));

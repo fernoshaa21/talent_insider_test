@@ -293,79 +293,54 @@ class _AuthViewState extends State<AuthView> {
 
                         const SizedBox(height: 24),
 
-                        // ---------- Divider "Or login with" ----------
                         Row(
                           children: [
                             const Expanded(
-                              child: Divider(color: Color(0xFFE5E7EB)),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                              ),
-                              child: Text(
-                                'Or login with',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: const Color(0xFF9CA3AF),
-                                ),
+                              child: Divider(
+                                thickness: 1,
+                                color: Color(0xFFE5E7EB),
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Or login with',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: const Color(0xFF9CA3AF),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
                             const Expanded(
-                              child: Divider(color: Color(0xFFE5E7EB)),
+                              child: Divider(
+                                thickness: 1,
+                                color: Color(0xFFE5E7EB),
+                              ),
                             ),
                           ],
                         ),
-
                         const SizedBox(height: 16),
 
-                        // ---------- Google Button ----------
+                        // Google button
                         SizedBox(
                           width: double.infinity,
                           height: 52,
-                          child: OutlinedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    // TODO: Google sign-in
-                                  },
+                          child: OutlinedButton.icon(
+                            onPressed: isLoading ? null : () {},
                             style: OutlinedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFFE5E7EB)),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // simple fake Google icon
-                                Container(
-                                  width: 22,
-                                  height: 22,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      color: const Color(0xFFE5E7EB),
-                                    ),
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    'G',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                const Text(
-                                  'Login with Google',
-                                  style: TextStyle(
-                                    color: Color(0xFF111827),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
+                            icon: Image.asset(
+                              'assets/images/google.png',
+                              height: 20,
+                            ),
+                            label: const Text(
+                              'Login with Google',
+                              style: TextStyle(
+                                color: Color(0xFF111827),
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),

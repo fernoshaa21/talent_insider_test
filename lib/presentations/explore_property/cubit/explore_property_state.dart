@@ -19,6 +19,7 @@ abstract class ExplorePropertyState with _$ExplorePropertyState {
     @Default(ExplorePropertyStatus.initial) ExplorePropertyStatus status,
     PropertiesResponse? properties,
     PropertiesSearchResponse? searchProperties,
+    LocationsPropertiesResponse? locationProperties,
     String? errorMessage,
   }) = _ExplorePropertyState;
 

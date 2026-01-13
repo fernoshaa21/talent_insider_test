@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_state.dart';
 
 import '../../../di/di.dart';
+import '../../../lib.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

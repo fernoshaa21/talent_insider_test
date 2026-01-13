@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trimitra_putra_mandiri/presentations/auth/cubit/auth_cubit.dart';
-import 'package:trimitra_putra_mandiri/router/router.dart';
+
+import '../../lib.dart';
 
 class DioTokenInterceptor extends Interceptor {
   final AuthCubit Function() getAuthCubit;
