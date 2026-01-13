@@ -6,11 +6,13 @@ class ExplorePropertyCubit extends HydratedCubit<ExplorePropertyState> {
   final GetPropertiesUsecase _getPropertiesUsecase;
   final SearchPropertiesUsecase _searchPropertiesUsecase;
   final GetLocationsPropertiesUsecase _getLocationsPropertiesUsecase;
+  final AddPropertiesUsecase _addPropertiesUsecase;
 
   ExplorePropertyCubit(
     this._getPropertiesUsecase,
     this._searchPropertiesUsecase,
     this._getLocationsPropertiesUsecase,
+    this._addPropertiesUsecase,
   ) : super(const ExplorePropertyState());
 
   /// 🏡 GET PROPERTIES
@@ -55,6 +57,58 @@ class ExplorePropertyCubit extends HydratedCubit<ExplorePropertyState> {
           state.copyWith(
             status: ExplorePropertyStatus.success,
             properties: propertiesResponse,
+            errorMessage: null,
+          ),
+        );
+      },
+    );
+  }
+
+  // Method untuk menambahkan properti baru
+  Future<void> addProperty({
+    required String type,
+    required String status,
+    required String name,
+    required String description,
+    required String address,
+    required int price,
+    String? image,
+    required int buildingArea,
+    required int landArea,
+  }) async {
+    emit(
+      state.copyWith(status: ExplorePropertyStatus.loading, errorMessage: null),
+    );
+
+    final result = await _addPropertiesUsecase(
+      AddPropertiesParam(
+        type: type,
+        status: status,
+        name: name,
+        description: description,
+        address: address,
+        price: price,
+        image: image ?? '',
+        buildingArea: buildingArea,
+        landArea: landArea,
+      ),
+    );
+
+    result.fold(
+      (failure) {
+        emit(
+          state.copyWith(
+            status: ExplorePropertyStatus.failure,
+            errorMessage: failure.message,
+          ),
+        );
+      },
+      (propertyResponse) {
+        emit(
+          state.copyWith(
+            status: ExplorePropertyStatus.success,
+            addPropertyResponse:
+                propertyResponse, // Simpan properti yang baru ditambahkan
             errorMessage: null,
           ),
         );

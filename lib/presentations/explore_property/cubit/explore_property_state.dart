@@ -20,6 +20,7 @@ abstract class ExplorePropertyState with _$ExplorePropertyState {
     PropertiesResponse? properties,
     PropertiesSearchResponse? searchProperties,
     LocationsPropertiesResponse? locationProperties,
+    AddPropertyResponse? addPropertyResponse,
     String? errorMessage,
   }) = _ExplorePropertyState;
 

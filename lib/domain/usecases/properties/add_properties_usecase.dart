@@ -16,10 +16,11 @@ class AddPropertiesUsecase
     return repository.addProperties(
       params.type,
       params.status,
+      params.name,
       params.description,
       params.address,
       params.price,
-      params.image,
+      params.image ?? '',
       params.buildingArea,
       params.landArea,
     );
@@ -29,20 +30,22 @@ class AddPropertiesUsecase
 class AddPropertiesParam extends Equatable {
   final String type;
   final String status;
+  final String name;
   final String description;
   final String address;
   final int price;
-  final String image;
+  String? image;
   final int buildingArea;
   final int landArea;
 
-  const AddPropertiesParam({
+  AddPropertiesParam({
     required this.type,
     required this.status,
+    required this.name,
     required this.description,
     required this.address,
     required this.price,
-    required this.image,
+    this.image,
     required this.buildingArea,
     required this.landArea,
   });
@@ -51,6 +54,7 @@ class AddPropertiesParam extends Equatable {
   List<Object?> get props => [
     type,
     status,
+    name,
     description,
     address,
     price,

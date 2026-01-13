@@ -39,6 +39,11 @@ final router = GoRouter(
       builder: (context, state) => const ExplorePropertyView(),
     ),
     GoRoute(
+      path: '/add_property',
+      name: 'add_property',
+      builder: (context, state) => const AddPropertyView(),
+    ),
+    GoRoute(
       path: '/search_properties',
       name: 'search_properties',
       builder: (context, state) => const SearchPropertyView(),

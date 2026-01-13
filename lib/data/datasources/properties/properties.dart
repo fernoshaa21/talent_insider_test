@@ -7,10 +7,11 @@ abstract class PropertiesApi {
   Future<ApiResponse<AddPropertyResponse>> addProperties(
     String type,
     String status,
+    String name,
     String description,
     String address,
     int price,
-    String image,
+    String? image,
     int buildingArea,
     int landArea,
   );
@@ -52,10 +53,11 @@ class PropertiesApiImpl implements PropertiesApi {
   Future<ApiResponse<AddPropertyResponse>> addProperties(
     String type,
     String status,
+    String name,
     String description,
     String address,
     int price,
-    String image,
+    String? image,
     int buildingArea,
     int landArea,
   ) async {
@@ -64,10 +66,11 @@ class PropertiesApiImpl implements PropertiesApi {
       data: {
         'type': type,
         'status': status,
+        'name': name,
         'description': description,
         'address': address,
-        'price': price,
-        'image': image,
+        'price': price.toDouble(),
+        'image': image ?? '',
         'building_area': buildingArea,
         'land_area': landArea,
       },
@@ -90,7 +93,6 @@ class PropertiesApiImpl implements PropertiesApi {
     int perPage = 12,
     List<int>? ids,
   }) async {
-    // build query params, buang yang null
     final query = <String, dynamic>{
       if (search != null && search.isNotEmpty) 'search': search,
       'view_mode': viewMode, // default simple/full

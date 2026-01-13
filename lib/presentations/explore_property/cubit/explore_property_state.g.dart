@@ -25,6 +25,11 @@ _ExplorePropertyState _$ExplorePropertyStateFromJson(
       : LocationsPropertiesResponse.fromJson(
           json['locationProperties'] as Map<String, dynamic>,
         ),
+  addPropertyResponse: json['addPropertyResponse'] == null
+      ? null
+      : AddPropertyResponse.fromJson(
+          json['addPropertyResponse'] as Map<String, dynamic>,
+        ),
   errorMessage: json['errorMessage'] as String?,
 );
 
@@ -35,6 +40,7 @@ Map<String, dynamic> _$ExplorePropertyStateToJson(
   'properties': instance.properties,
   'searchProperties': instance.searchProperties,
   'locationProperties': instance.locationProperties,
+  'addPropertyResponse': instance.addPropertyResponse,
   'errorMessage': instance.errorMessage,
 };
 

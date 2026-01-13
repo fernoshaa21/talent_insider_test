@@ -46,13 +46,14 @@ void _useCases() {
   di.registerSingleton<GetLocationsPropertiesUsecase>(
     GetLocationsPropertiesUsecase(di()),
   );
+  di.registerSingleton<AddPropertiesUsecase>(AddPropertiesUsecase(di()));
 }
 
 void _cubits() {
   //Cubits use MultiBlocProvider (RegisterSingleton Injections)
   di.registerLazySingleton(() => AuthCubit(di(), di()));
   di.registerLazySingleton(() => HomeCubit());
-  di.registerLazySingleton(() => ExplorePropertyCubit(di(), di(), di()));
+  di.registerLazySingleton(() => ExplorePropertyCubit(di(), di(), di(), di()));
 }
 
 void _utils() {

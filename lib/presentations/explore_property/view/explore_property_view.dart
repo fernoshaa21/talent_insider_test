@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../lib.dart';
 import '../cubit/explore_property_cubit.dart';
 import '../cubit/explore_property_state.dart';
@@ -27,43 +26,8 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
   // ---- local filter state ----
   String? _status; // "new" / "second" / null
   String? _type; // "rumah" / "apartment" / dll
-  late GoogleMapController mapController;
-  Set<Marker> _markers = {};
-  CameraPosition _initialPosition = CameraPosition(
-    target: LatLng(-6.250477, 106.797414),
-    zoom: 14,
-  );
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   RangeValues _priceRange = const RangeValues(0, 0);
-  Future<void> _getRegionBounds() async {
-    final LatLngBounds bounds = await mapController.getVisibleRegion();
-    final swLatitude = bounds.southwest.latitude;
-    final swLongitude = bounds.southwest.longitude;
-    final neLatitude = bounds.northeast.latitude;
-    final neLongitude = bounds.northeast.longitude;
-
-    // Send these coordinates to the API
-    _sendCoordinatesToAPI(swLatitude, swLongitude, neLatitude, neLongitude);
-  }
-
-  // Function to call the API with coordinates
-  void _sendCoordinatesToAPI(
-    double swLatitude,
-    double swLongitude,
-    double neLatitude,
-    double neLongitude,
-  ) {
-    // Call the cubit to fetch properties for the selected region
-    context.read<ExplorePropertyCubit>().getLocationProperties(
-      swLatitude: swLatitude,
-      swLongitude: swLongitude,
-      neLatitude: neLatitude,
-      neLongitude: neLongitude,
-    );
-  }
 
   /// maksimum harga (ikut Swagger)
   static const double kPriceMax = 1000000000; // 1 Miliar
@@ -96,22 +60,6 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
       if (priceMax > kPriceMax.toInt()) {
         priceMax = kPriceMax.toInt();
       }
-    }
-
-    // Function to update markers dynamically based on API response
-    void _updateMarkers(List<LatLng> locations) {
-      setState(() {
-        _markers.clear();
-        for (var location in locations) {
-          _markers.add(
-            Marker(
-              markerId: MarkerId(location.toString()),
-              position: location,
-              infoWindow: InfoWindow(title: 'Property'),
-            ),
-          );
-        }
-      });
     }
 
     debugPrint(
@@ -192,28 +140,10 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
                     Expanded(
                       child: Stack(
                         children: [
-                          GoogleMap(
-                            initialCameraPosition: _initialPosition,
-                            onMapCreated: _onMapCreated,
-                            markers: _markers,
-                            onCameraMove: (_) {
-                              // This is where the bounds are changed
-                            },
-                            onCameraIdle: () {
-                              // Once the camera stops moving, we fetch the region bounds
-                              _getRegionBounds();
-                            },
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            left: 10,
-                            right: 10,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Trigger location filter fetching (map bounds are used for this)
-                                _getRegionBounds();
-                              },
-                              child: Text('Find Properties in View'),
+                          Positioned.fill(
+                            child: Image.asset(
+                              'assets/images/map_sample.png',
+                              fit: BoxFit.cover,
                             ),
                           ),
                           SafeArea(

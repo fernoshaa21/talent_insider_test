@@ -193,7 +193,9 @@ class HomeView extends StatelessWidget {
                 ),
                 child: IconButton(
                   icon: const Icon(Icons.add),
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed('add_property');
+                  },
                 ),
               ),
 

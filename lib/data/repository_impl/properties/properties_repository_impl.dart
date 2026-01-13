@@ -13,10 +13,11 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
   Future<Either<Failure, AddPropertyResponse>> addProperties(
     String type,
     String status,
+    String name,
     String description,
     String address,
     int price,
-    String image,
+    String? image,
     int buildingArea,
     int landArea,
   ) async {
@@ -28,10 +29,11 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
       final response = await api.addProperties(
         type,
         status,
+        name,
         description,
         address,
         price,
-        image,
+        image ?? '',
         buildingArea,
         landArea,
       );

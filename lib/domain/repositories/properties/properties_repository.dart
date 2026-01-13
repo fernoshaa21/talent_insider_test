@@ -5,10 +5,11 @@ abstract class PropertiesRepository {
   Future<Either<Failure, AddPropertyResponse>> addProperties(
     String type,
     String status,
+    String name,
     String description,
     String address,
     int price,
-    String image,
+    String? image,
     int buildingArea,
     int landArea,
   );
