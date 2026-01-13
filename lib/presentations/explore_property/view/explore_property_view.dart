@@ -23,19 +23,17 @@ class ExplorePropertyView extends StatefulWidget {
 }
 
 class _ExplorePropertyViewState extends State<ExplorePropertyView> {
-  // ---- local filter state ----
-  String? _status; // "new" / "second" / null
-  String? _type; // "rumah" / "apartment" / dll
+  String? _status;
+  String? _type;
 
   RangeValues _priceRange = const RangeValues(0, 0);
 
-  /// maksimum harga (ikut Swagger)
-  static const double kPriceMax = 1000000000; // 1 Miliar
+  static const double kPriceMax = 1000000000;
 
   @override
   void initState() {
     super.initState();
-    // load awal
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetch();
     });
@@ -45,10 +43,8 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
     int? priceMin;
     int? priceMax;
 
-    // kondisi "belum pernah dipilih" (default 0..0) → jangan kirim filter
     final bool notPicked = _priceRange.start == 0 && _priceRange.end == 0;
 
-    // kondisi "full range" (0..max) → juga dianggap tanpa filter
     final bool fullRange =
         _priceRange.start == 0 && _priceRange.end >= kPriceMax;
 
@@ -376,8 +372,6 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
     );
   }
 
-  // ------------- FILTER BOTTOM SHEETS -------------
-
   void _openStatusFilter(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -407,12 +401,26 @@ class _ExplorePropertyViewState extends State<ExplorePropertyView> {
               _ChoiceChip(
                 label: 'New',
                 selected: tempStatus == 'new',
-                onTap: () => tempStatus = 'new',
+                onTap: () {
+                  setState(() {
+                    tempStatus = 'new';
+                    _status = 'new'; // Update directly on tap
+                  });
+                  _fetch(); // Update filter immediately
+                  Navigator.pop(context); // Close the bottom sheet immediately
+                },
               ),
               _ChoiceChip(
                 label: 'Second',
                 selected: tempStatus == 'second',
-                onTap: () => tempStatus = 'second',
+                onTap: () {
+                  setState(() {
+                    tempStatus = 'second';
+                    _status = 'second'; // Update directly on tap
+                  });
+                  _fetch(); // Update filter immediately
+                  Navigator.pop(context); // Close the bottom sheet immediately
+                },
               ),
             ],
           ),
